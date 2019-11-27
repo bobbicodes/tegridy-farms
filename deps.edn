@@ -1,0 +1,4 @@
+{:deps {org.clojure/clojure {:mvn/version "1.10.0"}
+        seancorfield/next.jdbc {:mvn/version "1.0.0-rc1"}
+        com.h2database/h2 {:mvn/version "1.4.197"}}}
+
