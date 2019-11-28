@@ -1,4 +1,5 @@
 {:deps {org.clojure/clojure {:mvn/version "1.10.0"}
         seancorfield/next.jdbc {:mvn/version "1.0.0-rc1"}
-        com.h2database/h2 {:mvn/version "1.4.197"}}}
+        org.postgresql/postgresql {:mvn/version "9.4-1201-jdbc41"}
+        clj-http {:mvn/version "3.10.0"}}}
 
