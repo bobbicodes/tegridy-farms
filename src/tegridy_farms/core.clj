@@ -12,15 +12,13 @@
 ;; Create a pull request
 ;; POST /repos/:owner/:repo/pulls
 
-(defn create-pr []
+(defn create-pr [title body branch]
   (client/post "https://api.github.com/repos/porkostomus/tegridy-farms/pulls"
               {:oauth-token (slurp "config.edn")
-               :body        "{
-  \"title\": \"Amazing new feature\",
-  \"body\": \"Please pull this in!\",
-  \"head\": \"create-pr\",
-  \"base\": \"master\"
-}"}))
+               :body (str "{\"title\": " title
+                          "\"body\": " body
+                          "\"head\": \"porkostomus:" branch
+                          "\"base\": \"master\"}")}))
 
 (comment
   
