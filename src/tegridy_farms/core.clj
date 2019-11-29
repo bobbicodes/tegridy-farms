@@ -1,5 +1,6 @@
 (ns tegridy-farms.core
-  (:require [clj-http.client :as client]))
+  (:require [clj-http.client :as client]
+            [clojure.data.json :as json]))
 
 ;; poll a GitHub repo, look for new pull requests
 ;; GET /repos/:owner/:repo/pulls
@@ -8,21 +9,16 @@
   (client/get "https://api.github.com/repos/porkostomus/tegridy-farms/pulls"
               {:oauth-token (slurp "config.edn")}))
 
+;; get a single pull request
+;; GET /repos/:owner/:repo/pulls/:pull_number
 
-;; Create a pull request
-;; POST /repos/:owner/:repo/pulls
-
-(defn create-pr [title body branch]
-  (client/post "https://api.github.com/repos/porkostomus/tegridy-farms/pulls"
-              {:oauth-token (slurp "config.edn")
-               :body (str "{\"title\": " title
-                          "\"body\": " body
-                          "\"head\": \"porkostomus:" branch
-                          "\"base\": \"master\"}")}))
+(defn get-pr [n]
+  (client/get (str "https://api.github.com/repos/porkostomus/tegridy-farms/pulls/" n)
+              {:oauth-token (slurp "config.edn")}))
 
 (comment
-  
-  (slurp "config.edn")
-  (pr-list)
-  (create-pr)
-  )
+ (keys (first (json/read-str 
+               (:body (pr-list))
+               :key-fn keyword)))
+ (json/read-str (:body (get-pr 1)) :key-fn keyword)
+ )
