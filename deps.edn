@@ -2,5 +2,6 @@
         seancorfield/next.jdbc {:mvn/version "1.0.0-rc1"}
         org.postgresql/postgresql {:mvn/version "9.4-1201-jdbc41"}
         clj-http {:mvn/version "3.10.0"}
-        org.clojure/data.json {:mvn/version "0.2.6"}}}
+        org.clojure/data.json {:mvn/version "0.2.6"}
+        twitter-api {:mvn/version "1.8.0"}}}
 
