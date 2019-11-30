@@ -19,3 +19,13 @@ Constraints
 Make plain HTTP requests against GitHub and Twitter, i.e., do not use a 3rd party Github or Twitter SDK.
 
 POST /repos/:owner/:repo/pulls
+
+## Development
+
+* Make sure [postgres](https://www.postgresql.org/) is installed and available on your `$PATH`. Launch postgres and create local db:
+
+```bash
+initdb pg
+pg_ctl -D pg -l logfile start
+createdb tegridy
+```

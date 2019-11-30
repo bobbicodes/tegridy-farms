@@ -11,10 +11,8 @@
 (def github-oauth-token (:oauth-token (:github (edn/read-string (slurp "config.edn")))))
 
 (def twitter-creds
-  (let [{:keys [api-key api-secret-key access-token access-token-secret]} 
-        (:twitter (edn/read-string (slurp "config.edn")))]
-    (oauth/make-oauth-creds
-     api-key api-secret-key access-token access-token-secret)))
+  (let [{:keys [api-key api-secret-key access-token access-token-secret]} (:twitter (edn/read-string (slurp "config.edn")))]
+    (oauth/make-oauth-creds api-key api-secret-key access-token access-token-secret)))
 
 (defn pr-list []
   (client/get "https://api.github.com/repos/porkostomus/tegridy-farms/pulls"
@@ -30,10 +28,17 @@
 (defn tweet [msg]
   (rest/statuses-update :oauth-creds twitter-creds :params {:status msg}))
 
+(defn pr-summary [pr]
+  (let [{:keys [number title body html_url]} pr]
+    (str "PR#" number " 
+         " "Title: " title " 
+         " "Body: " body " 
+         " "URL: " html_url)))
+
 (comment
- (keys (first (json/read-str 
-               (:body (pr-list))
-               :key-fn keyword)))
+ (tweet (pr-summary (first (json/read-str 
+                            (:body (pr-list))
+                            :key-fn keyword))))
  (keys (json/read-str (:body (get-pr 1)) :key-fn keyword))
   (tweet "Testing simpler creds function.")
  )
