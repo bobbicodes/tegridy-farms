@@ -29,6 +29,9 @@
 (defn tweet [msg]
   (rest/statuses-update :oauth-creds twitter-creds :params {:status msg}))
 
+(defn latest-tweet []
+  (rest/statuses-user-timeline :oauth-creds twitter-creds :params {:count 1}))
+
 (defn char-limit [n s]
   (if (< n (count s))
     (str (apply str (take n s)) "...")
@@ -47,17 +50,35 @@
 
 (def ds (jdbc/get-datasource db))
 
-#_(jdbc/execute! ds ["
+(defn create-requests-table! []
+  (jdbc/execute! ds ["
 create table requests (
   id serial primary key,
   title varchar (255) not null,
   body varchar (255) not null,
-  url varchar(255) not null
-)"])
+  url varchar (255) not null
+)"]))
+
+;; need to escape single-quotes
+
+(defn insert-request [request]
+  (let [{:keys [title body html_url]} request]
+    (jdbc/execute! ds [(str "
+insert into requests(title, body, url)
+  values('" (char-limit 250 title) "', '" (char-limit 250 body) "', '" html_url "')")])))
+
+(defn last-pr-tweeted
+  "Returns the number of the most recently posted PR"
+  []
+  (Integer/parseInt (str (nth (:text (first (:body (latest-tweet)))) 4))))
 
 (comment
+  (= 7 (last-pr-tweeted))
+  
+ (Integer/parseInt (str (nth (:text (first (:body (latest-tweet)))) 4)))
  (tweet (pr-summary (first (json/read-str
-                            (:body (pr-list))
-                            :key-fn keyword))))
- (pr-summary (json/read-str (:body (get-pr 1)) :key-fn keyword))
- )
+                                     (:body (pr-list))
+                                     :key-fn keyword))))
+  (insert-request (json/read-str (:body (get-pr 8)) :key-fn keyword))
+  (jdbc/execute! ds ["select * from requests"])
+  )
