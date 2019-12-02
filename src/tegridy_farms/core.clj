@@ -18,7 +18,7 @@
   (try
     (client/get "https://api.github.com/repos/porkostomus/tegridy-farms/pulls"
                 {:oauth-token github-oauth-token})
-    (catch Exception e (println (str "Caught exception: " e)))))
+    (catch Exception e (println (str "http error: " e)))))
 
 ;; get a single pull request
 ;; GET /repos/:owner/:repo/pulls/:pull_number
@@ -57,7 +57,7 @@
     (Integer/parseInt (subs pr-num 4))))
 
 (defn new-pr-nums
-  "Returns list of numbers of PRs on Github"
+  "Returns list of PR numbers on Github"
   []
   (map :number
        (json/read-str

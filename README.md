@@ -2,9 +2,13 @@
 
 HTTP Integration with GitHub and Twitter
 
+## Usage
+
+[Sync tweets now](https://tegridy-farms.herokuapp.com/)
+
 Upon execution, pull requests to this repo will be posted to the [TegridyFarms2](https://twitter.com/TegridyFarms2) twitter account.
 
-## Configuration
+## Local configuration
 
 You must supply your Github and Twitter credentials in a file named `config.edn`:
 
@@ -18,7 +22,7 @@ You must supply your Github and Twitter credentials in a file named `config.edn`
 
 ## Usage
 
-* Make sure you have the Clojure CLI tools installed, and run:
+* Make sure you have the Clojure [CLI tools](https://clojure.org/guides/deps_and_cli) installed, and run:
 
 ```bash
 clj -m tegridy-farms.core
